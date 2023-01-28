@@ -14,10 +14,12 @@ public class WhatsappRepository {
     private HashMap<Message, User> senderMap;
     private HashMap<Group, User> adminMap;
     private HashSet<String> userMobile;
+    private HashMap<String,User > usersMap;
     private int customGroupCount;
     private int messageId;
 
     public WhatsappRepository(){
+        this.usersMap = new HashMap<String,User>();
         this.groupMessageMap = new HashMap<Group, List<Message>>();
         this.groupUserMap = new HashMap<Group, List<User>>();
         this.senderMap = new HashMap<Message, User>();
@@ -26,4 +28,59 @@ public class WhatsappRepository {
         this.customGroupCount = 0;
         this.messageId = 0;
     }
+
+    //create user
+    public String createUser(String mobileNumber,String name) throws Exception {
+        if(userMobile.contains(mobileNumber)){
+            throw new Exception("Already exists");
+        }
+
+        userMobile.add(mobileNumber);
+        User user = new User(name,mobileNumber);
+        return "Success";
+    }
+
+    //create new group
+    public Group createGroup(List<User>users){
+        if(users.size()>2){
+            customGroupCount+=1;
+            Group group = new Group("Group "+customGroupCount, users.size());
+            groupUserMap.put(group, users);
+            adminMap.put(group, users.get(0));
+            groupMessageMap.put(group, new ArrayList<Message>());
+            return group;
+        }
+        Group group = new Group(users.get(1).getName(), users.size());
+        groupUserMap.put(group, users);
+        adminMap.put(group, users.get(0));
+        groupMessageMap.put(group, new ArrayList<Message>());
+        return group;
+    }
+    public int createMessage(String content){
+        messageId++;
+        Message message=new Message(messageId,content);
+
+        return messageId;
+    }
+
+    //Send message
+    public int sendMessage(Message message, User sender, Group group) throws Exception{
+
+        if(!groupUserMap.containsKey(group))
+        {
+            throw new Exception("Group does not exist");
+        }
+        if(!groupUserMap.get(group).contains(sender))
+        {
+            throw new Exception("You are not allowed to send message");
+        }
+        senderMap.put(message, sender);
+        List<Message>temp=groupMessageMap.get(group);
+        temp.add(message);
+        groupMessageMap.put(group,temp);
+        return temp.size();
+
+    }
+
+
 }
