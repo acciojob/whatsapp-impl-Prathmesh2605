@@ -68,11 +68,11 @@ public class WhatsappRepository {
 
         if(!groupUserMap.containsKey(group))
         {
-            throw new Exception("Group does not exist");
+            throw new Exception("Group doesn't exist");
         }
         if(!groupUserMap.get(group).contains(sender))
         {
-            throw new Exception("You are not allowed to send message");
+            throw new Exception("You're not allowed to send messages");
         }
         senderMap.put(message, sender);
         List<Message>temp=groupMessageMap.get(group);
@@ -80,6 +80,26 @@ public class WhatsappRepository {
         groupMessageMap.put(group,temp);
         return temp.size();
 
+    }
+
+    public String changeAdmin(User approver, User user, Group group) throws Exception{
+
+        if(!groupUserMap.containsKey(group))
+        {
+            throw new Exception("Group Not Found");
+        }
+
+        if(!groupUserMap.get(group).contains(user))
+        {
+            throw new Exception("User not found in the group");
+        }
+        if(!approver.equals(adminMap.get(group)))
+        {
+            throw new Exception("User does not have rights");
+        }
+        adminMap.put(group,user);
+
+        return "SUCCESS";
     }
 
 
