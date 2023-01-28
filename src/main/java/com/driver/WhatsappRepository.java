@@ -68,11 +68,11 @@ public class WhatsappRepository {
 
         if(!groupUserMap.containsKey(group))
         {
-            throw new Exception("Group doesn't exist");
+            throw new Exception("Group Not Found");
         }
         if(!groupUserMap.get(group).contains(sender))
         {
-            throw new Exception("You're not allowed to send messages");
+            throw new Exception("You are not allowed to send message");
         }
         senderMap.put(message, sender);
         List<Message>temp=groupMessageMap.get(group);
@@ -99,7 +99,7 @@ public class WhatsappRepository {
         }
         adminMap.put(group,user);
 
-        return "SUCCESS";
+        return "Success";
     }
 
 
