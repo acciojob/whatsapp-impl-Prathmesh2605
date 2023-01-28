@@ -37,7 +37,7 @@ public class WhatsappRepository {
 
         userMobile.add(mobileNumber);
         User user = new User(name,mobileNumber);
-        return "Success";
+        return "SUCCESS";
     }
 
     //create new group
@@ -86,20 +86,20 @@ public class WhatsappRepository {
 
         if(!groupUserMap.containsKey(group))
         {
-            throw new Exception("Group Not Found");
+            throw new Exception("Group does not exist");
         }
 
         if(!groupUserMap.get(group).contains(user))
         {
-            throw new Exception("User not found in the group");
+            throw new Exception("Approver does not have rights");
         }
         if(!approver.equals(adminMap.get(group)))
         {
-            throw new Exception("User does not have rights");
+            throw new Exception("User is not a participant");
         }
         adminMap.put(group,user);
 
-        return "Success";
+        return "SUCCESS";
     }
 
 
